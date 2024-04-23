@@ -4,8 +4,16 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { register } from 'register-service-worker'
 
+import { registerMouse } from './lib/mouse'
+import { registerCanvas } from './lib/canvas'
+import Beginners from './Beginners'
+import MutualAttractionDemo from './MutualAttraction'
+import AngleAndRadians from './AngleAndRadians'
+import Drawing from './Drawing'
+import HarmonicMotion from './HarmonicMotion'
+let canvas
 function registerSW () {
-  register(`/workout-timer/serviceworker.js`)
+  register(`/demo-game/serviceworker.js`)
 }
 
 const hasNotificationPermission = async () => {
@@ -24,62 +32,102 @@ const requestNotificationPermission = async () => {
 
 function sendMessageToSW (intervals) {
   window.navigator.serviceWorker.ready.then(reg => {
-    reg.active.postMessage({ type: 'message', body: { text: 'hey', data: intervals } })
+    reg.active.postMessage({
+      type: 'message',
+      body: { text: 'hey', data: intervals }
+    })
   })
+}
+function storeSelection (pageList) {
+  window.localStorage.setItem('pageList', JSON.stringify(pageList))
+}
+
+function loadSelection () {
+  let data = window.localStorage.getItem('pageList')
+  if (data) return JSON.parse(data)
+  return null
 }
 
 function App () {
   const [ask, setAsk] = createSignal(false)
-
+  const [showMenu, setShowMenu] = createSignal(false)
+  const [pageList, setPageList] = createSignal({
+    Beginners: false,
+    'Mutual Attraction': false,
+    AngleAndRadians: false,
+    Drawing: false,
+    "Harmonic Motion": false
+  })
+  const [ready, setReady] = createSignal(false)
   onMount(async () => {
     registerSW()
     const hasPermission = await hasNotificationPermission()
     if (!hasPermission) {
       setAsk(true)
     }
+
+    registerMouse()
+    registerCanvas(canvas)
+    setReady(true)
+    let data = loadSelection()
+    if (data) setPageList({ ...pageList(), ...data })
   })
 
-  const [interval, setInterval] = createSignal(30)
-  const [intervals, setIntervals] = createSignal([])
-
-  const addInterval = () => {
-    setIntervals([...intervals(), Number(interval())])
+  function changeActive (page) {
+    const list = pageList()
+    for (let e in list) {
+      list[e] = false
+    }
+    list[page] = true
+    setPageList({ ...list })
+    setShowMenu(false)
+    storeSelection(pageList())
   }
-
 
   return (
     <>
-      <div></div>
-      <h1>Workout Timer</h1>
-      <div class='card'>
-        <dialog prop:open={ask()}>
-          <h4>Like to get Notified?</h4>
-          <button
-            onclick={() => {
-              requestNotificationPermission()
-              setAsk(false)
-            }}
-          >
-            activate notifications
-          </button>
-        </dialog>
-        <input
-          type='number'
-          from='30'
-          to='240'
-          value={interval()}
-          step='10'
-          id='duration'
-          onchange={e => setInterval(e.target.value)}
-        />
-        <button onClick={() => addInterval()}>Add Interval</button>
-        <For each={intervals()}>
-          { (int) => (
-            <p>{int}</p>
-          )}
-        </For>
-        <button onclick={() => sendMessageToSW(intervals())}>START</button>
+      <Show when={pageList().Beginners === true && ready()}>
+        <Beginners />
+      </Show>
+      <Show when={pageList()['Mutual Attraction'] === true && ready()}>
+        <MutualAttractionDemo />
+      </Show>
+      <Show when={pageList().AngleAndRadians === true && ready()}>
+        <AngleAndRadians />
+      </Show>
+      <Show when={pageList().Drawing === true && ready()}>
+        <Drawing />
+      </Show>
+      <Show when={pageList()["Harmonic Motion"] === true && ready()}>
+        <HarmonicMotion />
+      </Show>
+      <div id='pile'>
+        <canvas ref={canvas} id='playground' />
+        <button id='menu-button' onClick={() => setShowMenu(!showMenu())}>
+          next
+        </button>
+        <Show when={showMenu()}>
+          <div id='menu'>
+            <For each={Object.keys(pageList())}>
+              {page => (
+                <button onclick={() => changeActive(page)}>{page}</button>
+              )}
+            </For>
+          </div>
+        </Show>
       </div>
+
+      <dialog prop:open={ask()}>
+        <h4>Like to get Notified?</h4>
+        <button
+          onclick={() => {
+            requestNotificationPermission()
+            setAsk(false)
+          }}
+        >
+          activate notifications
+        </button>
+      </dialog>
     </>
   )
 }

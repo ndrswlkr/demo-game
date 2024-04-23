@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 
@@ -24,4 +24,34 @@
 
 .read-the-docs {
   color: #888;
+}
+
+#playground {
+  max-width: 100%;
+  max-height: 100%;
+  place-self: center center;
+}
+
+#pile{
+  display: grid;
+  grid-template-areas: pile;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+#menu-button{
+  place-self: start start;
+}
+#pile > *{
+  grid-area: pile;
+ 
+
+}
+
+#menu{
+  margin-top: 10vh;
+  padding: 10vh;
+  place-self: center center;
 }

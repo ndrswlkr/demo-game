@@ -15,44 +15,44 @@ export default defineConfig({
 
       },
       manifest: {
-        name: 'workout timer',
-        short_name: 'wt',
-        description: 'timing your workouts',
+        name: 'demo game',
+        short_name: 'demogame',
+        description: 'just a little demo game',
         "icons": [
           {
-            "src": "/workout-timer/pwa-192x192.png",
+            "src": "/demo-game/pwa-192x192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
           },
           {
-            "src": "/workout-timer/pwa-512x512.png",
+            "src": "/demo-game/pwa-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
           },
           {
-            "src": "/workout-timer/pwa-maskable-192x192.png",
+            "src": "/demo-game/pwa-maskable-192x192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable"
           },
           {
-            "src": "/workout-timer/pwa-maskable-512x512.png",
+            "src": "/demo-game/pwa-maskable-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
           }
         ],
-        "start_url": "/workout-timer/index.html",
+        "start_url": "/demo-game/index.html",
         "display": "standalone",
         "background_color": "#FFFFFF",
         "theme_color": "#FFFFFF",
-        scope: '/workout-timer/',
+        scope: '/demo-game/',
       }
     })
   ],
-  base: '/workout-timer',
+  base: '/demo-game',
   build:{
     target: 'esnext',
     outDir: 'docs'
