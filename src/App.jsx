@@ -11,6 +11,7 @@ import MutualAttractionDemo from './MutualAttraction'
 import AngleAndRadians from './AngleAndRadians'
 import Drawing from './Drawing'
 import HarmonicMotion from './HarmonicMotion'
+import SpringForces from './SpringForces'
 let canvas
 function registerSW () {
   register(`/demo-game/serviceworker.js`)
@@ -56,7 +57,8 @@ function App () {
     'Mutual Attraction': false,
     AngleAndRadians: false,
     Drawing: false,
-    "Harmonic Motion": false
+    "Harmonic Motion": false,
+    "Spring Forces": false
   })
   const [ready, setReady] = createSignal(false)
   onMount(async () => {
@@ -100,6 +102,9 @@ function App () {
       </Show>
       <Show when={pageList()["Harmonic Motion"] === true && ready()}>
         <HarmonicMotion />
+      </Show>
+      <Show when={pageList()["Spring Forces"] === true && ready()}>
+        <SpringForces />
       </Show>
       <div id='pile'>
         <canvas ref={canvas} id='playground' />
