@@ -2,7 +2,7 @@ import { Player } from './lib/player'
 import { Vector } from './lib/vector'
 import { mousePressed, mouseX, mouseY } from './lib/mouse'
 import { canvas, context, center, background, point } from './lib/canvas'
-import { lerp, map, random } from './lib/mathlib'
+import { floatRange, lerp, map, random } from './lib/mathlib'
 import { onMount, onCleanup } from 'solid-js'
 import { Vehicle } from './lib/vehicle'
 import { Caprot } from './lib/caprot'
@@ -13,14 +13,21 @@ class Game {
     this.run = false
     this.width = canvas.width
     this.height = canvas.height
+    this.audioCtx = null
+    var constraints = { audio: true } // add video constraints if required
 
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+      this.audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+
+      // ... rest of code
+    })
     this.waves = []
     this.makeRandomWaves()
     this.lockMouse = false
   }
   makeRandomWaves () {
     this.waves = []
-    for (let w = 0; w < 2; w++) {
+    for (let w = 0; w < 7; w++) {
       this.waves.push(
         new Wave(
           random(this.height / 28, this.height / 15),
@@ -29,36 +36,56 @@ class Game {
         )
       )
     }
-    
   }
   async playSound () {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-
-    const myArrayBuffer = audioCtx.createBuffer(
+    const myArrayBuffer = this.audioCtx.createBuffer(
       2,
-      audioCtx.sampleRate * 3,
-      audioCtx.sampleRate
+      this.audioCtx.sampleRate * 3,
+      this.audioCtx.sampleRate
     )
-
+    let ramp = this.getRamp(myArrayBuffer.length)
+    let downRamp =  this.getRamp(myArrayBuffer.length)
+    downRamp.reverse()
     for (let channel = 0; channel < myArrayBuffer.numberOfChannels; channel++) {
       console.log(myArrayBuffer.length)
       const nowBuffering = myArrayBuffer.getChannelData(channel)
       for (let i = 0; i < myArrayBuffer.length; i++) {
-        let x = i 
+        let x = i
 
         let sample = 0
         this.waves.forEach(wave => {
           sample += wave.calculateAudio(x)
+          sample *= .5
         })
+        
+        if (i < ramp.length ) {
+             sample *= ramp[i]
+          // console.log(sample)
+        }
+       
+        let downTresh = myArrayBuffer.length * .5
+        if (i > downTresh) {
+             sample *= downRamp[i - downTresh]
+          // console.log(sample)
+        }
+
         nowBuffering[i] = sample
       }
     }
-
-    const source = audioCtx.createBufferSource()
+    this.audioCtx.resume()
+    const source = this.audioCtx.createBufferSource()
     source.buffer = myArrayBuffer
-    source.connect(audioCtx.destination)
+    source.connect(this.audioCtx.destination)
     source.start()
   }
+
+  getRamp (totalLength) {
+    let rampLength = totalLength * 0.5
+    let ramp = floatRange(.4, 1, rampLength)
+    console.log(ramp)
+    return ramp
+  }
+
   update () {
     if (mousePressed && this.lockMouse === false) {
       this.makeRandomWaves()
@@ -95,7 +122,7 @@ function HarmonicMotion () {
     game = new Game()
     game.run = true
     game.animate()
-    game.playSound()
+    //game.playSound()
   })
   onCleanup(() => {
     game.run = false

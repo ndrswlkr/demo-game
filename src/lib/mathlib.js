@@ -1,3 +1,17 @@
+
+export function floatRange(from, to, length){
+  const span = to - from
+  const step = span / length
+  console.log(step)
+  const range = []
+  let count = 0
+  for (let i = 0; i < length; i++){
+    range.push(count)
+    count += step
+  }
+  return range
+}
+
 export function constrain (n, min, max) {
   if (n >= max) n = max
   if (n <= min) n = min

@@ -2,7 +2,7 @@ import { Player } from './lib/player'
 import { Vector } from './lib/vector'
 import { mousePressed, mouseX, mouseY } from './lib/mouse'
 import { canvas, context, center, background, point } from './lib/canvas'
-import { lerp, map, random } from './lib/mathlib'
+import { floatRange, lerp, map, random } from './lib/mathlib'
 import { onMount, onCleanup } from 'solid-js'
 import { Vehicle } from './lib/vehicle'
 import { Caprot } from './lib/caprot'
@@ -14,19 +14,34 @@ class Game {
     this.width = canvas.width
     this.height = canvas.height
     this.lockMouse = false
-    this.y = 590
-    this.restLength = 300
-    this.k = 0.1
-    this.velocity = 0
 
+    this.restLength = 100
+    this.k = 0.08
+    this.velocity = new Vector(0,0)
+    this.gravity = new Vector(0, 4)
+    this.anchor = new Vector(center.x, center.y /3)
+    this.bob = new Vector(center.x, center.y * .8)
   }
 
   update () {
     if (mousePressed && this.lockMouse === false) {
-      this.lockMouse = true
-      this.y = 590
-      setTimeout(() => (this.lockMouse = false), 300)
+        console.log("pressed", mouseX)
+      //this.lockMouse = true
+      this.bob.x = mouseX
+      this.bob.y = mouseY
+      this.velocity.set(0,0)
+     // setTimeout(() => (this.lockMouse = false), 300)
     }
+    let force =  Vector.sub(this.bob, this.anchor)
+    let x = force.mag() - this.restLength
+    force.normalize()
+    force.mult(-1 * this.k * x)
+    this.velocity.add(force)
+    this.velocity.add(this.gravity)
+    this.bob.add( this.velocity)
+
+    this.velocity.mult(.94)
+
   }
 
   draw () {
@@ -34,16 +49,15 @@ class Game {
     background('#0a0')
     context.fillStyle = "#010"
     context.beginPath()
-    context.arc(center.x, this.y, 25, 0, Math.PI * 2)
+    context.arc(this.anchor.x, this.anchor.y, 25, 0, Math.PI * 2)
+    context.arc(this.bob.x, this.bob.y, 25, 0, Math.PI * 2)
     context.fill()
+    context.strokeStyle = "#010"
+    context.beginPath()
+    context.moveTo(this.anchor.x, this.anchor.y)
+    context.lineTo(this.bob.x, this.bob.y)
+    context.stroke()
    
-    let x = this.y - this.restLength
-    let force = -this.k * x
-    this.velocity += force
-    this.y  += this.velocity
-
-    this.velocity *= .94
-
   }
 
   animate () {
