@@ -26,3 +26,21 @@ export function point (x, y, size, color = 'magenta') {
   context.arc(x, y, size, 0, 2 * Math.PI, true)
   context.fill()
 }
+
+export function star(x,y,size,color="yellow"){
+    context.beginPath()
+    context.fillStyle = color
+    context.moveTo( x, y-size)
+    context.lineTo(x+size, y+size)
+    context.lineTo(x-size, y+size)
+    context.fill()
+    context.closePath()
+
+     context.beginPath()
+    context.fillStyle = color
+    context.moveTo( x, y+size + (size/3))
+    context.lineTo(x-size, y-size+(size/3))
+    context.lineTo(x+size, y-size+(size/3))
+    context.fill()
+    context.closePath() 
+}

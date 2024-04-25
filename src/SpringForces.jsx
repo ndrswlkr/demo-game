@@ -24,13 +24,11 @@ class Game {
   }
 
   update () {
-    if (mousePressed && this.lockMouse === false) {
-        console.log("pressed", mouseX)
+    if (mousePressed ) {
       //this.lockMouse = true
       this.bob.x = mouseX
       this.bob.y = mouseY
       this.velocity.set(0,0)
-     // setTimeout(() => (this.lockMouse = false), 300)
     }
     let force =  Vector.sub(this.bob, this.anchor)
     let x = force.mag() - this.restLength

@@ -1,36 +1,35 @@
 export let mouseX = 0
 export let mouseY = 0
 export let mousePressed = false
-
+import { canvas } from "./canvas"
 export function registerMouse () {
   console.log('mouse registered')
-  window.onmousemove = e => {
+  canvas.onmousemove = e => {
     mouseX = e.clientX
     mouseY = e.clientY
   }
   
-  window.onpointermove =  e => {
+  canvas.onpointermove =  e => {
     mouseX = e.clientX
     mouseY = e.clientY
-    console.log("move")
   }
 
-  window.onmousedown = e => {
+  canvas.onmousedown = e => {
     mousePressed = true
     mouseX = e.clientX
     mouseY = e.clientY
   }
-  window.onmouseup = e => {
+  canvas.onmouseup = e => {
     mousePressed = false
     mouseX = e.clientX
     mouseY = e.clientY
   }
-  window.onpointerdown = e => {
+  canvas.onpointerdown = e => {
     mousePressed = true
     mouseX = e.clientX
     mouseY = e.clientY
   }
-  window.onpointerup = e => {
+  canvas.onpointerup = e => {
     mousePressed = false
     mouseX = e.clientX
     mouseY = e.clientY

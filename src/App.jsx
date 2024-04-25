@@ -12,6 +12,7 @@ import AngleAndRadians from './AngleAndRadians'
 import Drawing from './Drawing'
 import HarmonicMotion from './HarmonicMotion'
 import SpringForces from './SpringForces'
+import ParticleSystem from './ParticleSystem'
 let canvas
 function registerSW () {
   register(`/demo-game/serviceworker.js`)
@@ -58,7 +59,8 @@ function App () {
     AngleAndRadians: false,
     Drawing: false,
     "Harmonic Motion": false,
-    "Spring Forces": false
+    "Spring Forces": false,
+    "Particle System": false
   })
   const [ready, setReady] = createSignal(false)
   onMount(async () => {
@@ -68,8 +70,8 @@ function App () {
       setAsk(true)
     }
 
-    registerMouse()
     registerCanvas(canvas)
+    registerMouse()
     setReady(true)
     let data = loadSelection()
     if (data) setPageList({ ...pageList(), ...data })
@@ -106,6 +108,9 @@ function App () {
       <Show when={pageList()["Spring Forces"] === true && ready()}>
         <SpringForces />
       </Show>
+      <Show when={pageList()["Particle System"] === true && ready()}>
+        <ParticleSystem />
+      </Show>
       <div id='pile'>
         <canvas ref={canvas} id='playground' />
         <button id='menu-button' onClick={() => setShowMenu(!showMenu())}>
@@ -120,8 +125,6 @@ function App () {
             </For>
           </div>
         </Show>
-      </div>
-
       <dialog prop:open={ask()}>
         <h4>Like to get Notified?</h4>
         <button
@@ -133,6 +136,8 @@ function App () {
           activate notifications
         </button>
       </dialog>
+      </div>
+
     </>
   )
 }

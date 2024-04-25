@@ -55,3 +55,7 @@
   padding: 10vh;
   place-self: center center;
 }
+
+#playground{
+  touch-action: none;
+}
