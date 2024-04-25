@@ -84,7 +84,7 @@ export class Particle {
     context.fillStyle = `rgba(255,255,0, ${this.lifetime / 255})`
     context.fill()
     context.closePath() */
-    let color = `rgba(255,105,0, ${this.lifetime / 255})`
+    let color = `rgba(255,255,0, ${this.lifetime / 255})`
     star(this.pos.x, this.pos.y, this.r, color)
   }
 }
