@@ -45,7 +45,7 @@ export default defineConfig({
           }
         ],
         "start_url": "/demo-game/index.html",
-        "display": "standalone",
+        "display": "fullscreen",
         "background_color": "#FFFFFF",
         "theme_color": "#FFFFFF",
         scope: '/demo-game/',
