@@ -37,5 +37,6 @@ self.addEventListener('notificationclick', event => {
       }),
   );
 }
+//this is an update
 
 )
