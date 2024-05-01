@@ -13,6 +13,8 @@ export class Particle {
     this.lifetime = 255
     this.finished = false
     this.bounce = -0.7
+    this.color = {r: 255, g: 105, b:0}
+    this.gravity = new Vector(0, 0.5)
   }
   contact () {
     let diff = canvas.height - (this.pos.y + this.r)
@@ -71,6 +73,7 @@ export class Particle {
   }
 
   update () {
+    this.applyForce(this.gravity)
     this.vel.add(this.acc)
     this.pos.add(this.vel)
     this.acc.set(0, 0)
@@ -84,7 +87,7 @@ export class Particle {
     context.fillStyle = `rgba(255,255,0, ${this.lifetime / 255})`
     context.fill()
     context.closePath() */
-    let color = `rgba(255,255,0, ${this.lifetime / 255})`
-    star(this.pos.x, this.pos.y, this.r, color)
+    let col = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.lifetime / 255})`
+    star(this.pos.x, this.pos.y, this.r, col)
   }
 }

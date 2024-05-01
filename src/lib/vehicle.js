@@ -18,16 +18,29 @@ export class Vehicle {
     if (this.pos.y >= canvas.height - this.r) {
       this.pos.y = canvas.height - this.r
       this.vel.y *= -1
+      console.log("edge")
     }
 
     if (this.pos.x <= 0 + this.r) {
       this.pos.x = this.r
       this.vel.x *= -1
+      console.log("edge")
+
     }
     if (this.pos.x >= canvas.width - this.r) {
       this.pos.x = canvas.width - this.r
       this.vel.x *= -1
+      console.log("edge")
+
     }
+    if(this.pos.y <= 0 + this.r){
+
+      this.pos.y = 0 + this.r
+      this.vel.y *= -1
+      console.log("edge")
+
+    }
+
   }
   contact () {
     let diff = canvas.height - (this.pos.y + this.r)
@@ -58,7 +71,6 @@ export class Vehicle {
   detract (actor) {
     let force = Vector.sub(this.pos, actor.pos)
     if(force.mag() > 40) return
-    console.log(force.mag())
     force.mult(-1)
     let distance = force.mag()
     let distanceSqr = distance * distance

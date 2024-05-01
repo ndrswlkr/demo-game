@@ -13,6 +13,11 @@ import Drawing from './Drawing'
 import HarmonicMotion from './HarmonicMotion'
 import SpringForces from './SpringForces'
 import ParticleSystem from './ParticleSystem'
+import Steering from './Steering'
+import FallingSands from './FallingSands'
+import Perlin from './Perlin'
+import PathFollowing from './PathFollowing'
+import FlowField from './FlowField'
 let canvas
 function registerSW () {
   register(`/demo-game/serviceworker.js`)
@@ -60,7 +65,12 @@ function App () {
     Drawing: false,
     "Harmonic Motion": false,
     "Spring Forces": false,
-    "Particle System": false
+    "Particle System": false,
+    Steering: false,
+    "Falling Sands": false,
+    Perlin: false,
+    "Path Following": false,
+    "Flow Field": false
   })
   const [ready, setReady] = createSignal(false)
   onMount(async () => {
@@ -110,6 +120,21 @@ function App () {
       </Show>
       <Show when={pageList()["Particle System"] === true && ready()}>
         <ParticleSystem />
+      </Show>
+      <Show when={pageList()["Steering"] === true && ready()}>
+        <Steering />
+      </Show>
+      <Show when={pageList()["Falling Sands"] === true && ready()}>
+        <FallingSands />
+      </Show>
+      <Show when={pageList()["Perlin"] === true && ready()}>
+        <Perlin />
+      </Show>
+      <Show when={pageList()["Path Following"] === true && ready()}>
+        <PathFollowing />
+      </Show>
+      <Show when={pageList()["Flow Field"] === true && ready()}>
+        <FlowField />
       </Show>
       <div id='pile'>
         <canvas ref={canvas} id='playground' />

@@ -1,3 +1,9 @@
+export function scalarProjection(a,b){
+  let bCopy = b.clone()
+  bCopy.normalize()
+  return a.dot(bCopy)
+}
+
 export class Vector {
   constructor (x, y) {
     this.x = x
@@ -58,6 +64,11 @@ export class Vector {
     this.x /= sc
     this.y /= sc
   }
+  dist(v){
+    let c = v.clone()
+    c.sub(this)
+    return c.mag()
+  }
   mag () {
     const magnitude = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2))
     return magnitude
@@ -92,5 +103,11 @@ export class Vector {
   rotate(angle){
     let final = this.heading() + angle
     this.setHeading(final)
+  }
+  dot(v) {
+    let x = v.x
+    let y = v.y
+    let z = v.z || 0
+    return this.x * (x || 0) + this.y * (y || 0) ;
   }
 }

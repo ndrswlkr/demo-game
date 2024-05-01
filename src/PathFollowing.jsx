@@ -1,32 +1,40 @@
 import { Player } from './lib/player'
-import { Vector } from './lib/vector'
+import { Vector, scalarProjection } from './lib/vector'
 import { mousePressed, mouseX, mouseY } from './lib/mouse'
 import { canvas, context, center, background, point } from './lib/canvas'
 import { floatRange, lerp, map, random } from './lib/mathlib'
 import { onMount, onCleanup } from 'solid-js'
-import { Particles } from './lib/particle-system'
+import { Boid } from './lib/boid'
+import { Path } from './lib/path'
+
+
 
 class Game {
   constructor () {
     this.run = false
     this.width = canvas.width
     this.height = canvas.height
-    this.particleSystem = new Particles(center.x, center.y)
+    this.boid = new Boid(random(this.width), random(this.height))
+    this.path = new Path(0, center.y, this.width, center.y)
+
   }
 
 
 
   update () {
-    if (mousePressed) {
-        this.particleSystem.addParticles(mouseX, mouseY)
-    }
-    this.particleSystem.update()
-  }
-
+    let force = this.boid.follow(this.path)
+    this.boid.applyForce(force)
+    this.boid.update()
+    
+}
+  
   draw () {
     //context.reset()
     background('#000')
-    this.particleSystem.draw()
+    this.boid.draw()
+    context.beginPath()
+    this.path.draw()
+  
   }
 
   animate () {
@@ -38,7 +46,7 @@ class Game {
 
 let game
 
-function ParticleSystem () {
+function PathFollowing () {
   onMount(() => {
     game = new Game()
     game.run = true
@@ -50,4 +58,4 @@ function ParticleSystem () {
   })
   return <div></div>
 }
-export default ParticleSystem
+export default PathFollowing

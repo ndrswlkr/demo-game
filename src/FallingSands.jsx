@@ -1,32 +1,33 @@
-import { Player } from './lib/player'
-import { Vector } from './lib/vector'
+
 import { mousePressed, mouseX, mouseY } from './lib/mouse'
 import { canvas, context, center, background, point } from './lib/canvas'
 import { floatRange, lerp, map, random } from './lib/mathlib'
 import { onMount, onCleanup } from 'solid-js'
-import { Particles } from './lib/particle-system'
+import { Sands } from './lib/sands'
+
 
 class Game {
   constructor () {
     this.run = false
     this.width = canvas.width
     this.height = canvas.height
-    this.particleSystem = new Particles(center.x, center.y)
+    this.sands = new Sands()
   }
 
 
 
   update () {
+    this.sands.update()
     if (mousePressed) {
-        this.particleSystem.addParticles(mouseX, mouseY)
+        this.sands.pourSand(mouseX, mouseY)
     }
-    this.particleSystem.update()
-  }
+    
+}
 
   draw () {
     //context.reset()
     background('#000')
-    this.particleSystem.draw()
+    this.sands.draw()
   }
 
   animate () {
@@ -38,7 +39,7 @@ class Game {
 
 let game
 
-function ParticleSystem () {
+function FallingSands () {
   onMount(() => {
     game = new Game()
     game.run = true
@@ -50,4 +51,4 @@ function ParticleSystem () {
   })
   return <div></div>
 }
-export default ParticleSystem
+export default FallingSands

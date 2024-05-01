@@ -44,3 +44,10 @@ export function star(x,y,size,color="yellow"){
     context.fill()
     context.closePath() 
 }
+
+export function line(x1, y1, x2, y2, lineWidth = 1, color = "white"){
+  context.beginPath()
+  context.strokeStyle = color
+  context.moveTo(x1, y1)
+  context.lineTo(x2, y2)
+}
