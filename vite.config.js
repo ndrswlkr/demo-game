@@ -17,7 +17,7 @@ export default defineConfig({
       manifest: {
         name: 'demo game',
         short_name: 'demogame',
-        description: 'just a little demo game',
+        description: 'just a demo',
         "icons": [
           {
             "src": "/demo-game/pwa-192x192.png",
